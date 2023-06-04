@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Movies{% endblock %}
+
+{% block content %}
+<title>Movies List</title>
+<style>
+  /* CSS styles for the movies list page */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -10px;
+  }
+
+  .col-md-4 {
+    width: 30.33%;
+    padding: 10px;
+  }
+
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    height: 100%;
+  }
+
+  .card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+
+  .logout-btn {
+    float: right;
+  }
+
+  .logout-btn a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .row-gap {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<div class="container">
+  <div class="row">
+    {% for movie in movies %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img src="{{ movie.image.url }}" class="card-img-top" alt="{{ movie.title }}">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{% url 'movies:movie_detail' movie.pk %}">{{ movie.title }}</a></h5>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="row-gap"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}Seat Status{% endblock %}
+
+{% block content %}
+
+<head>
+    <title>Seat Status</title>
+    <style>
+        /* CSS styles for the seat status page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logout-btn {
+            float: right;
+        }
+
+        .logout-btn a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .logout-btn a:hover {
+            text-decoration: underline;
+        }
+
+        .home-btn {
+            float: left;
+        }
+
+        .home-btn a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .home-btn a:hover {
+            text-decoration: underline;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .booked-seat {
+            background-color: red;
+            color: white;
+            padding: 2px 6px;
+            margin-right: 5px;
+            cursor: not-allowed;
+        }
+
+        .empty-seat {
+            background-color: green;
+            color: white;
+            padding: 2px 6px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .loader .loader-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+
+<div class="container">
+    <div class="card">
+        <h3 class="card-title">Seat Status</h3>
+        <p class="card-text">Total Seats: {{ movie.total_seats }}</p>
+        <p class="card-text">Booked Seats:
+            {% for seat in movie.bookedseatdetail_set.all %}
+            <span class="booked-seat">{{ seat.seat_number }}</span>
+            {% empty %}
+            No booked seats yet.
+            {% endfor %}
+        </p>
+        <p class="card-text">Empty Seats:
+            {% for seat_number in movie.get_empty_seat_numbers %}
+            <span class="empty-seat" onclick="bookSeat({{ seat_number }})">{{ seat_number }}</span>
+            {% empty %}
+            No empty seats.
+            {% endfor %}
+        </p>
+    </div>
+</div>
+
+<div class="loader">
+    <div class="loader-content">Loading...</div>
+</div>
+<script>
+    function bookSeat(seatNumber) {
+        // Display loader
+        $('.loader').show();
+
+        // Perform an AJAX request to book the seat
+        // Here, you can send the seat number and movie ID to your backend view for processing
+        // You can use JavaScript frameworks like jQuery or Axios to make the AJAX request
+        // After the seat is successfully booked, reload the page
+        $.ajax({
+            url: `http://127.0.0.1:8000/movies/book_seat/{{ movie.id }}/`,
+            method: 'POST',
+            data: {
+                seat_number: seatNumber,
+                movie_id: '{{ movie.id }}',
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                // Handle the success response
+                // Update the UI to reflect the booked seat
+                if (response.success) {
+                    // Find the seat element and update its CSS class
+                    var seatElement = document.querySelector('.empty-seat[data-seat-number="' + seatNumber + '"]');
+                    seatElement.classList.remove('empty-seat');
+                    seatElement.classList.add('booked-seat');
+                }
+                // Update the seat status values
+                $('.card-text-booked').text('Booked Seats: ' + response.booked_seats);
+                $('.card-text-empty').text('Empty Seats: ' + response.empty_seats);
+
+            },
+            error: function (error) {
+                // Handle the error response
+                console.log(error);
+            },
+            complete: function () {
+                // Hide the loader
+                setTimeout(function () {
+                    $('.loader').hide();
+
+                    // Redirect to the My Bookings page
+                    window.location.href = "{% url 'movies:my_bookings' %}";
+
+                }, 3000);
+            }
+        });
+    }
+</script>
+{% endblock %}

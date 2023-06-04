@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+
+<head>
+    <title>My Bookings</title>
+    <style>
+        /* CSS styles for the my bookings page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .booking {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .booking-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .booking-details {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>My Bookings</h2>
+        {% if bookings %}
+        {% for booking in bookings %}
+        <div class="booking">
+            <h3 class="booking-title">Booking ID: {{ booking.id }}</h3>
+            <p class="booking-details">Movie: {{ booking.movie }}</p>
+            <p class="booking-details">Date: {{ booking.booking_date }}</p>
+            <p class="booking-details">Seats: {{ booking.seat_number }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No bookings yet.</p>
+        {% endif %}
+    </div>
+
+    {% endblock %}

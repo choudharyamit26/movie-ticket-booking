@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+
+        /* Add this CSS code to your existing styles */
+        input[type="email"] {
+            /* Apply the same styles as other input fields */
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+    <!-- Add these CDN links to your HTML file -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Signup</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="error">
+                {{ form.non_field_errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+            <div class="error">
+                {{ form.username.errors|join:", " }}
+            </div>
+            {% endif %}
+            <label for="id_name">Name:</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+            <div class="error">
+                {{ form.name.errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="error">
+                {{ form.email.errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_dob">Date of Birth:</label>
+            {{ form.dob }}
+            {% if form.dob.errors %}
+            <div class="error">
+                {{ form.dob.errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_mobile_number">Mobile Number:</label>
+            {{ form.mobile_number }}
+            {% if form.mobile_number.errors %}
+            <div class="error">
+                {{ form.mobile_number.errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+            <div class="error">
+                {{ form.password1.errors.as_ul }}
+            </div>
+            {% endif %}
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+            <div class="error">
+                {{ form.password2.errors.as_ul }}
+            </div>
+            {% endif %}
+            <button type="submit">Signup</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'users:login' %}">Login</a></p>
+    </div>
+</body>
+<script>
+    $(function () {
+        $('#id_dob').datepicker({
+            dateFormat: 'yy-mm-dd',  // Set the desired date format
+            changeYear: true,        // Allow year selection
+            yearRange: '1900:2050'   // Set the range of selectable years
+        });
+    });
+</script>
+
+</html>

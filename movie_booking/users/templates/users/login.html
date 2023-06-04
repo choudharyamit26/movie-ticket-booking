@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors.as_ul }}
+            </div>
+            {% endif %}
+            {% if form.errors %}
+            <div class="error">
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors.as_ul }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+            <label for="id_password">Password:</label>
+            {{ form.password }}
+            <button type="submit">Login</button>
+        </form>
+        <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset Password</a></p>
+        <p>Don't have an account? <a href="{% url 'users:register' %}">Signup</a></p>
+
+    </div>
+</body>
+</html>

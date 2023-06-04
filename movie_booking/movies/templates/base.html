@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        /* CSS styles for the base template */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .links a {
+            color: white;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .footer {
+            background-color: #333;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Movie Booking System</h1>
+            <div class="links">
+                <a href="{% url 'movies:movies_list' %}">Movies</a>
+                <a href="{% url 'movies:my_bookings' %}">My Bookings</a>
+                <a href="{% url 'users:logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            &copy; 2023 Movie Booking System. All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>
